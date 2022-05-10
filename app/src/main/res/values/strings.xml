@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Assignment</string>
+    <string name="main_pdf">PDF</string>
+    <string name="main_video">Video</string>
+
+    <string name="horizontal_image">Image video</string>
+
+    <string name="vertical_image">Image PDF</string>
+    <string name="all_buttonDownload">Download</string>
 </resources>
