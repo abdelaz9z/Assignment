@@ -1,13 +1,7 @@
 package com.hyperone.assignment.ui.main
 
-import android.Manifest
-import android.app.DownloadManager
-import android.content.Context
 import android.content.pm.PackageManager
-import android.net.Uri
-import android.os.Build
 import android.os.Bundle
-import android.os.Environment
 import android.util.Log
 import android.view.View
 import android.widget.Toast
@@ -32,10 +26,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var mainViewModel: MainViewModel
 
-    private lateinit var mUrl: String
-    private lateinit var mTitle: String
-    private lateinit var mDescription: String
-
     /**
      * onCreate method is called when the activity is created.
      *
@@ -52,9 +42,19 @@ class MainActivity : AppCompatActivity() {
         val recyclerViewMainVideo = binding.recyclerViewMainVideo
         val recyclerViewMainPdf = binding.recyclerViewMainPdf
 
-//        PRDownloader.initialize(applicationContext);
+        mainViewModel.pdfList.observe(this) {
 
-        mainViewModel.sourceList.observe(this) {
+            it?.let {
+                // Set the adapter on the recycler view and set the layout manager
+                initRecyclerView(
+                    recyclerViewMainPdf,
+                    RecyclerView.VERTICAL,
+                    SourceAdapter(it, VERTICAL)
+                )
+            }
+        }
+
+        mainViewModel.videoList.observe(this) {
 
             it?.let {
                 // Set the adapter on the recycler view and set the layout manager
@@ -62,13 +62,6 @@ class MainActivity : AppCompatActivity() {
                     recyclerViewMainVideo,
                     RecyclerView.HORIZONTAL,
                     SourceAdapter(it, HORIZONTAL)
-                )
-
-                // Set the adapter on the recycler view and set the layout manager
-                initRecyclerView(
-                    recyclerViewMainPdf,
-                    RecyclerView.VERTICAL,
-                    SourceAdapter(it, VERTICAL)
                 )
             }
         }

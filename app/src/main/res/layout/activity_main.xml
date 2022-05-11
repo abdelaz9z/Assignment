@@ -7,6 +7,17 @@
     tools:context=".ui.main.MainActivity">
 
     <!-- Video title -->
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/hyperone_logo"
+        android:contentDescription="@string/hyperone_logo" />
+
     <TextView
         android:id="@+id/textMainVideo"
         android:layout_width="match_parent"
@@ -18,11 +29,11 @@
         android:paddingTop="5dp"
         android:paddingBottom="5dp"
         android:text="@string/main_video"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
     <!-- Progress bar download: show status download-->
     <com.google.android.material.progressindicator.LinearProgressIndicator
@@ -58,7 +69,7 @@
         android:paddingTop="5dp"
         android:paddingBottom="5dp"
         android:text="@string/main_pdf"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"
         android:textColor="@color/white"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/recyclerViewMainVideo" />
