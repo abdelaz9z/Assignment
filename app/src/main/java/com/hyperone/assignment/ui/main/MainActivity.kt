@@ -1,8 +1,16 @@
 package com.hyperone.assignment.ui.main
 
+import android.Manifest
+import android.app.DownloadManager
+import android.content.Context
+import android.content.pm.PackageManager
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,6 +32,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var mainViewModel: MainViewModel
 
+    private lateinit var mUrl: String
+    private lateinit var mTitle: String
+    private lateinit var mDescription: String
+
     /**
      * onCreate method is called when the activity is created.
      *
@@ -39,6 +51,8 @@ class MainActivity : AppCompatActivity() {
 
         val recyclerViewMainVideo = binding.recyclerViewMainVideo
         val recyclerViewMainPdf = binding.recyclerViewMainPdf
+
+//        PRDownloader.initialize(applicationContext);
 
         mainViewModel.sourceList.observe(this) {
 
@@ -66,6 +80,26 @@ class MainActivity : AppCompatActivity() {
             it?.let {
                 binding.progressBarVideo.visibility = if (it) View.VISIBLE else View.GONE
                 binding.progressBarPdf.visibility = if (it) View.VISIBLE else View.GONE
+            }
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        when (requestCode) {
+            PERMISSION_CODE -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Permission from popup was granted, perform download
+//                    downloadFile(mUrl, mTitle, mDescription)
+                } else {
+                    // Permission from popup was denied, show error message
+                    Toast.makeText(this, "Permission denied!", Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
@@ -109,5 +143,9 @@ class MainActivity : AppCompatActivity() {
             Log.d("MainActivity", "url: $url")
             Log.d("MainActivity", "name: $name")
         }
+    }
+
+    companion object {
+        const val PERMISSION_CODE = 1000
     }
 }

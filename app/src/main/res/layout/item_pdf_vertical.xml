@@ -85,7 +85,6 @@
             android:id="@+id/progressBarDownload"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:indeterminate="true"
             app:indicatorColor="@color/primary_dark"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

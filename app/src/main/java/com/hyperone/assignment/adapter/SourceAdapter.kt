@@ -1,5 +1,6 @@
 package com.hyperone.assignment.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +12,10 @@ import com.google.android.material.progressindicator.LinearProgressIndicator
 import com.hyperone.assignment.R
 import com.hyperone.assignment.const.Layout.HORIZONTAL
 import com.hyperone.assignment.models.Source
+import com.hyperone.assignment.utils.DownloadUtil
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.rxkotlin.subscribeBy
+import zlc.season.rxdownload4.download
 
 /**
  * Adapter to inflate the appropriate list item layout and populate the view with information
@@ -114,6 +119,43 @@ class SourceAdapter(
 
         holder.itemView.setOnClickListener {
             onItemClick?.invoke(sourcesData)
+        }
+
+        holder.imageButtonDownload?.setOnClickListener {
+
+            val name = sourcesData.name.toString()
+            val url = sourcesData.url.toString()
+            val type = sourcesData.type.toString()
+
+
+            val disposable = sourcesData.url?.download()
+                ?.observeOn(AndroidSchedulers.mainThread())
+                ?.subscribeBy(
+                    onNext = { progress ->
+
+                        DownloadUtil().downloadFile(url, name, type, holder.itemView.context)
+
+                        //download progress
+                        Log.d(
+                            "Progress",
+                            "${progress.downloadSizeStr()}/${progress.totalSizeStr()}"
+                        )
+                        holder.progressBarDownload?.setProgressCompat(
+                            progress.percent().toInt(),
+                            true
+                        )
+                    },
+                    onComplete = {
+                        //download complete (Open file)
+                        holder.imageButtonDownload.setBackgroundResource(R.drawable.ic_baseline_folder_24)
+                    },
+                    onError = {
+                        //download failed (Retry button)
+                        holder.imageButtonDownload.setBackgroundResource(R.drawable.ic_baseline_loop_24)
+                    }
+                )
+
+            Log.i("Download", disposable.toString())
         }
     }
 }
