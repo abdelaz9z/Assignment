@@ -55,15 +55,18 @@
         <!-- Text url: for example (https://storage.googleapis.com/exoplayer-test-media-1/mp4/android-screens-10s.mp4)-->
         <TextView
             android:id="@+id/textUrl"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
+            android:layout_marginEnd="10dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Caption"
             android:textColor="#999999"
             app:layout_constraintBottom_toBottomOf="@+id/divider"
+            app:layout_constraintEnd_toStartOf="@+id/imageButtonDownload"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/textName"
             app:layout_constraintTop_toBottomOf="@+id/textName"
-            tools:text="Wed, 20 Jan 19, 05:08 PM" />
+            tools:text="https://kotlinlang.org/docs/kotlin-reference.pdf" />
 
         <!-- Image button download: for example (download, close download)-->
         <ImageButton

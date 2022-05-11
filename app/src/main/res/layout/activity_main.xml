@@ -4,7 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".ui.main.MainActivity">
+
+    <!-- Progress bar download: show status download-->
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/progressBarVideo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        app:indicatorColor="@color/primary_dark"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textMainVideo" />
 
     <!-- Video title -->
     <TextView
@@ -23,9 +34,23 @@
         android:id="@+id/recyclerViewMainVideo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:scrollbars="horizontal"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textMainVideo" />
+
+
+    <!-- Progress bar download: show status download-->
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/progressBarPdf"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        app:indicatorColor="@color/primary_dark"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textMainPdf" />
 
     <!-- PDF title -->
     <TextView
@@ -44,6 +69,8 @@
         android:id="@+id/recyclerViewMainPdf"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:scrollbars="vertical"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
