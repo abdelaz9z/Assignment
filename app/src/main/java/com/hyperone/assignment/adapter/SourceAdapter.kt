@@ -8,17 +8,25 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import androidx.room.Room
 import com.google.android.material.progressindicator.LinearProgressIndicator
 import com.hyperone.assignment.R
 import com.hyperone.assignment.const.Layout.HORIZONTAL
 import com.hyperone.assignment.const.SourceType.PDF
 import com.hyperone.assignment.models.Source
+import com.hyperone.assignment.room.AppDatabase
+import com.hyperone.assignment.utils.DatabaseRoomUtil
 import com.hyperone.assignment.utils.DownloadUtil
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy
 import zlc.season.rxdownload4.download
 
 /**
+ * SourceAdapter class is used to display the list of sources in recycler view.
+ *
+ * @author Abdelaziz Daoud
+ * @since 12/05/2022
+ *
  * Adapter to inflate the appropriate list item layout and populate the view with information
  * from the appropriate data source
  */
@@ -121,13 +129,16 @@ class SourceAdapter(
         }
 
         holder.imageButtonDownload?.setOnClickListener {
-
-            val name = sourcesData.name.toString()
-            val url = sourcesData.url.toString().trim()
+            // Get the current state of the download button
+            val id = sourcesData.id!!.toInt()
             val type = sourcesData.type.toString()
+            val url = sourcesData.url.toString().trim()
+            val name = sourcesData.name.toString()
 
+            // Download the file
             DownloadUtil().downloadFileFromUrl(url, name, type, holder.itemView.context)
 
+            // Set the progress bar to visible
             val disposable = url.download().observeOn(AndroidSchedulers.mainThread())?.subscribeBy(
                 onNext = { progress ->
                     holder.progressBarDownload?.max = progress.totalSize.toInt()
@@ -136,12 +147,22 @@ class SourceAdapter(
                 onComplete = {
                     //download complete (Open file)
                     holder.imageButtonDownload.setBackgroundResource(R.drawable.ic_baseline_folder_24)
+
+                    // Insert the downloaded file into the database room
+                    val db = Room.databaseBuilder(
+                        holder.itemView.context, AppDatabase::class.java,
+                        "database-name"
+                    ).allowMainThreadQueries().build()
+                    DatabaseRoomUtil(holder.itemView.context).insertDataToDatabase(
+                        db, id, type, url, name
+                    )
                 },
                 onError = {
                     //download failed (Retry button)
                     holder.imageButtonDownload.setBackgroundResource(R.drawable.ic_baseline_loop_24)
                 }
             )
+            Log.i("SourceAdapter", disposable.toString())
         }
     }
 }

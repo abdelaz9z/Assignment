@@ -11,6 +11,9 @@ import com.hyperone.assignment.network.APIService
 /**
  * ViewModel for the MainActivity screen.
  *
+ * @author Abdelaziz Daoud
+ * @since 11/05/2022
+ *
  * @property _isLoading MutableLiveData<Boolean>
  * @property isLoading MutableLiveData<Boolean>
  * @property videoSources ArrayList<Source>

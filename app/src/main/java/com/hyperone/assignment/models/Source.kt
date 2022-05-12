@@ -3,6 +3,9 @@ package com.hyperone.assignment.models
 /**
  * Source model class for holding the source data.
  *
+ * @author Abdelaziz Daoud
+ * @since 12/05/2022
+ *
  * @property id Int?
  * @property type String?
  * @property url String?

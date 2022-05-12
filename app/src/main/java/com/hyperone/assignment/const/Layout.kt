@@ -16,6 +16,11 @@
 package com.hyperone.assignment.const
 
 /**
+ * Layout resource ids
+ *
+ * @author Abdelaziz Daoud
+ * @since 12/05/2022
+ *
  * Static object to hold constant values to be associated with a layout.
  * These values are intended to be passed into the [Pdf Adapter] to determine the type of layout
  * to inflate.

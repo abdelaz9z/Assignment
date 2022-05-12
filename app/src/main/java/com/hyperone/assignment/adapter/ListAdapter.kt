@@ -12,7 +12,17 @@ import com.hyperone.assignment.R
 import com.hyperone.assignment.const.SourceType
 import com.hyperone.assignment.room.Source
 
-class ListAdapter(private var sources: ArrayList<Source>) : RecyclerView.Adapter<ListAdapter.MyViewHolder>() {
+
+/**
+ * ListAdapter class is used to display the list of sources in the recycler view.
+ *
+ * @author Abdelaziz Daoud
+ * @since 12/05/2022
+ * @property sources ArrayList<Source>
+ * @constructor
+ */
+class ListAdapter(private var sources: ArrayList<Source>) :
+    RecyclerView.Adapter<ListAdapter.MyViewHolder>() {
 
     class MyViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         // Declare and initialize all of the list item UI components
@@ -22,19 +32,35 @@ class ListAdapter(private var sources: ArrayList<Source>) : RecyclerView.Adapter
         val imageButtonDownload: ImageButton? = view.findViewById(R.id.imageButtonDownload)
         val progressBarDownload: LinearProgressIndicator? =
             view.findViewById(R.id.progressBarDownload)
-
     }
 
+    /**
+     * Create new views (invoked by the layout manager)
+     *
+     * @param parent ViewGroup
+     * @param viewType Int
+     * @return MyViewHolder
+     */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         return MyViewHolder(
             LayoutInflater.from(parent.context).inflate(R.layout.item_pdf_vertical, parent, false)
         )
     }
 
+    /**
+     * Called by RecyclerView to display the data at the specified position
+     *
+     * @return Int
+     */
     override fun getItemCount(): Int {
         return sources.size
     }
 
+    /**
+     * Called by RecyclerView to display the data at the specified position
+     * @param holder MyViewHolder
+     * @param position Int
+     */
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val currentItem = sources[position]
         // Set the image type
@@ -52,10 +78,5 @@ class ListAdapter(private var sources: ArrayList<Source>) : RecyclerView.Adapter
         // ButtonDownload & ProgressBarDownload are hidden by default
         holder.imageButtonDownload!!.visibility = View.GONE
         holder.progressBarDownload!!.visibility = View.GONE
-    }
-
-    fun setData(user: ArrayList<Source>) {
-        this.sources = user
-        notifyDataSetChanged()
     }
 }

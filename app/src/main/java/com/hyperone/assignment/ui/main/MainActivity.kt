@@ -1,12 +1,10 @@
 package com.hyperone.assignment.ui.main
 
 import android.os.Bundle
-import android.text.TextUtils
 import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.widget.ImageButton
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -26,6 +24,9 @@ import com.hyperone.assignment.room.Source
 /**
  * MainActivity class is the main activity of the application.
  * It contains the recycler view and the adapter to display the sources.
+ *
+ * @author Abdelaziz Daoud
+ * @since 11/05/2022
  *
  * @property binding ActivityMainBinding
  * @property mainViewModel MainViewModel
@@ -126,55 +127,11 @@ class MainActivity : AppCompatActivity() {
 
         val linearLayoutManager = LinearLayoutManager(this, layoutManager, false)
         recyclerView.layoutManager = linearLayoutManager
-
-        typeAdapter.onItemClick = {
-            val id = it.id!!.toInt()
-            val type = it.type.toString()
-            val url = it.url.toString()
-            val name = it.name.toString()
-
-            // Insert data (video, pdf) to database
-            insertDataToDatabase(id, type, url, name)
-        }
     }
 
     //==============================================================================================
     // ● Save response items in local Database Room                                                                                              =
     //==============================================================================================
-
-    /**
-     * Insert data (video, pdf) to database (Room) and open the detail activity
-     *
-     * @param type String
-     * @param url String
-     * @param name String
-     */
-    private fun insertDataToDatabase(uid: Int, type: String, url: String, name: String) {
-        if (inputCheck(type, url, name)) {
-            // Create User Object
-            val source = Source(uid, type, url, name)
-
-            // Add Data to Database
-            val sourceDao = db.sourceDao()
-            sourceDao.insertAll(source)
-
-            Toast.makeText(this, "Successfully added!", Toast.LENGTH_LONG).show()
-        } else {
-            Toast.makeText(this, "Please fill out all fields.", Toast.LENGTH_LONG).show()
-        }
-    }
-
-    /**
-     * Check if the input is valid
-     *
-     * @param type String
-     * @param url String
-     * @param name String
-     * @return Boolean
-     */
-    private fun inputCheck(type: String, url: String, name: String): Boolean {
-        return !(TextUtils.isEmpty(type) && TextUtils.isEmpty(url) && TextUtils.isEmpty(name))
-    }
 
     /**
      * My source bottom sheet dialog fragment class (for video, pdf)
@@ -229,6 +186,11 @@ class MainActivity : AppCompatActivity() {
         dialog.show()
     }
 
+    /**
+     * Setup the full height of the bottom sheet
+     *
+     * @param bottomSheet View
+     */
     private fun setupFullHeight(bottomSheet: View) {
         val layoutParams = bottomSheet.layoutParams
         layoutParams.height = WindowManager.LayoutParams.MATCH_PARENT

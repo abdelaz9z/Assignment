@@ -5,7 +5,10 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 /**
- * Created by akash on 05/11/2022.
+ * APIClient is a singleton class that provides the Retrofit instance.
+ *
+ * @since 11/05/2022
+ * @author Abdelaziz Daoud
  */
 class APIClient {
 

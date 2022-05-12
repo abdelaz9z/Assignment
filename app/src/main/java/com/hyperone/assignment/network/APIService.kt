@@ -5,7 +5,10 @@ import retrofit2.Call
 import retrofit2.http.GET
 
 /**
- * Created by akbar on 05/11/2022.
+ * This is the interface for the API service.
+ *
+ * @author Abdelaziz Daoud
+ * @since 11/05/2022
  */
 interface APIService {
 

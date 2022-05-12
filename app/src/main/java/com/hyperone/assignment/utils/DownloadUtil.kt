@@ -5,6 +5,12 @@ import android.content.Context
 import android.net.Uri
 import zlc.season.rxdownload4.manager.*
 
+/**
+ * DownloadUtil class is used to download the file from the url
+ *
+ * @author Abdelaziz Daoud
+ * @since 11/05/2022
+ */
 class DownloadUtil {
     /**
      * Download file from url and save it to local storage with given name and extension.
