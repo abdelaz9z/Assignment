@@ -23,3 +23,5 @@ Create a simple mobile application that:
 
 ## While building this app:
 ●	use GIT and commit as often as possible using descriptive descriptions.
+
+<img src="https://github.com/abdelaz9z/Assignment/blob/master/home_page.jpeg" width=285> <●●● ●●● ●●●> <img src="https://github.com/abdelaz9z/Assignment/blob/master/my_sources.jpeg" width=285>
