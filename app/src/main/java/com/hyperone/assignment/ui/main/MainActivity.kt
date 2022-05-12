@@ -1,5 +1,6 @@
 package com.hyperone.assignment.ui.main
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -22,7 +23,6 @@ import com.hyperone.assignment.databinding.ActivityMainBinding
 import com.hyperone.assignment.room.AppDatabase
 import com.hyperone.assignment.room.Source
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 
 /**
  * MainActivity class is the main activity of the application.
@@ -69,7 +69,7 @@ class MainActivity : AppCompatActivity() {
          * Show data in recycler view for pdf
          */
         mainViewModel.getPdfList()
-        lifecycleScope.launch {
+        lifecycleScope.launchWhenStarted {
             mainViewModel.pdfList.collect { pdfList ->
                 // Set the adapter on the recycler view and set the layout manager
                 initRecyclerView(
@@ -85,7 +85,7 @@ class MainActivity : AppCompatActivity() {
          * Show data in recycler view for videos
          */
         mainViewModel.getVideoList()
-        lifecycleScope.launch {
+        lifecycleScope.launchWhenStarted {
             mainViewModel.videoList.collect { videoList ->
                 // Set the adapter on the recycler view and set the layout manager
                 initRecyclerView(
@@ -99,7 +99,7 @@ class MainActivity : AppCompatActivity() {
         /**
          * ProgressBar (video, pdf) is the progress bar to display the loading state.
          */
-        lifecycleScope.launch {
+        lifecycleScope.launchWhenStarted {
             mainViewModel.isLoading.collect { isLoading ->
                 binding.progressBarVideo.visibility = if (isLoading) View.VISIBLE else View.GONE
                 binding.progressBarPdf.visibility = if (isLoading) View.VISIBLE else View.GONE
@@ -141,6 +141,7 @@ class MainActivity : AppCompatActivity() {
     /**
      * My source bottom sheet dialog fragment class (for video, pdf)
      */
+    @SuppressLint("InflateParams")
     private fun mySourceBottomSheetDialog() {
         val dialog = BottomSheetDialog(this, R.style.BottomSheetDialogTheme)
         val view = layoutInflater.inflate(R.layout.bottom_sheet_my_source, null)

@@ -38,12 +38,12 @@ class SourceAdapter(
     /**
      * Inflates the appropriate list item layout and returns the view holder
      */
-    var onItemClick: ((Source) -> Unit)? = null
+    private var onItemClick: ((Source) -> Unit)? = null
 
     /**
      * Inflates the appropriate list item layout and returns the view holder
      */
-    var onButtonClick: ((Source) -> Unit)? = null
+    private var onButtonClick: ((Source) -> Unit)? = null
 
     /**
      * Inflates the appropriate list item layout and returns the view holder
@@ -143,10 +143,12 @@ class SourceAdapter(
                 onNext = { progress ->
                     holder.progressBarDownload?.max = progress.totalSize.toInt()
                     holder.progressBarDownload?.progress = progress.downloadSize.toInt()
+
                 },
                 onComplete = {
                     //download complete (Open file)
                     holder.imageButtonDownload.setBackgroundResource(R.drawable.ic_baseline_folder_24)
+                    holder.imageButtonDownload.isEnabled = false
 
                     // Insert the downloaded file into the database room
                     val db = Room.databaseBuilder(
@@ -160,6 +162,7 @@ class SourceAdapter(
                 onError = {
                     //download failed (Retry button)
                     holder.imageButtonDownload.setBackgroundResource(R.drawable.ic_baseline_loop_24)
+                    holder.imageButtonDownload.isEnabled = true
                 }
             )
             Log.i("SourceAdapter", disposable.toString())
