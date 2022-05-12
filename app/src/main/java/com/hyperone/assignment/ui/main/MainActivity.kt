@@ -2,22 +2,26 @@ package com.hyperone.assignment.ui.main
 
 import android.os.Bundle
 import android.text.TextUtils
+import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.widget.ImageButton
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.room.Room
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.hyperone.assignment.R
+import com.hyperone.assignment.adapter.ListAdapter
 import com.hyperone.assignment.adapter.SourceAdapter
 import com.hyperone.assignment.const.Layout.HORIZONTAL
 import com.hyperone.assignment.const.Layout.VERTICAL
 import com.hyperone.assignment.databinding.ActivityMainBinding
+import com.hyperone.assignment.room.AppDatabase
+import com.hyperone.assignment.room.Source
 
 /**
  * MainActivity class is the main activity of the application.
@@ -31,7 +35,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var mainViewModel: MainViewModel
 
+    private lateinit var sourceArrayList: ArrayList<Source>
     private lateinit var recyclerViewMySource: RecyclerView
+
+    private lateinit var db: AppDatabase
 
     /**
      * onCreate method is called when the activity is created.
@@ -43,6 +50,9 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        db = Room.databaseBuilder(applicationContext, AppDatabase::class.java, "database-name")
+            .allowMainThreadQueries().build()
 
         mainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
 //        mSourceViewModel = ViewModelProvider(this).get(SourceViewModel::class.java)
@@ -118,19 +128,20 @@ class MainActivity : AppCompatActivity() {
         recyclerView.layoutManager = linearLayoutManager
 
         typeAdapter.onItemClick = {
-            val id = it.id.toString()
+            val id = it.id!!.toInt()
             val type = it.type.toString()
             val url = it.url.toString()
             val name = it.name.toString()
 
             // Insert data (video, pdf) to database
-            insertDataToDatabase(type, url, name)
+            insertDataToDatabase(id, type, url, name)
         }
     }
 
     //==============================================================================================
     // ● Save response items in local Database Room                                                                                              =
     //==============================================================================================
+
     /**
      * Insert data (video, pdf) to database (Room) and open the detail activity
      *
@@ -138,12 +149,14 @@ class MainActivity : AppCompatActivity() {
      * @param url String
      * @param name String
      */
-    private fun insertDataToDatabase(type: String, url: String, name: String) {
+    private fun insertDataToDatabase(uid: Int, type: String, url: String, name: String) {
         if (inputCheck(type, url, name)) {
             // Create User Object
+            val source = Source(uid, type, url, name)
 
             // Add Data to Database
-
+            val sourceDao = db.sourceDao()
+            sourceDao.insertAll(source)
 
             Toast.makeText(this, "Successfully added!", Toast.LENGTH_LONG).show()
         } else {
@@ -176,14 +189,24 @@ class MainActivity : AppCompatActivity() {
         recyclerViewMySource.layoutManager = LinearLayoutManager(this)
         recyclerViewMySource.setHasFixedSize(true)
 
-//        for (source in sources) {
-//            Log.d("MainActivity", "id: ${source.name}")
-//            // Recyclerview
-//            val adapter = ListAdapter(source.type, source.url, source.name)
-//            recyclerViewMySource.adapter = adapter
-//            recyclerViewMySource.layoutManager = LinearLayoutManager(this)
-//        }
-//
+        sourceArrayList = arrayListOf()
+
+        val sourceDao = db.sourceDao()
+        val sources: List<Source> = sourceDao.getAll()
+
+        for (source in sources) {
+
+            val type = source.type
+            val url = source.url
+            val name = source.name
+
+            Log.i("Database room", "id: $type url: $url name: $name")
+
+            sourceArrayList.addAll(listOf(source))
+            val listAdapter = ListAdapter(sourceArrayList)
+            recyclerViewMySource.adapter = listAdapter
+        }
+
         // Dismiss the dialog when the user makes a selection
         imageButtonMySourceDone.setOnClickListener {
             dialog.dismiss()
