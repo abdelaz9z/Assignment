@@ -7,6 +7,7 @@ import android.view.WindowManager
 import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
@@ -20,6 +21,8 @@ import com.hyperone.assignment.const.Layout.VERTICAL
 import com.hyperone.assignment.databinding.ActivityMainBinding
 import com.hyperone.assignment.room.AppDatabase
 import com.hyperone.assignment.room.Source
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 /**
  * MainActivity class is the main activity of the application.
@@ -63,30 +66,32 @@ class MainActivity : AppCompatActivity() {
 
         /**
          * Observe the data in the view model and set the adapter on the recycler view
-         * Show data in recycler view for videos
+         * Show data in recycler view for pdf
          */
-        mainViewModel.pdfList.observe(this) {
-            it?.let {
+        mainViewModel.getPdfList()
+        lifecycleScope.launch {
+            mainViewModel.pdfList.collect { pdfList ->
                 // Set the adapter on the recycler view and set the layout manager
                 initRecyclerView(
                     recyclerViewMainPdf,
                     RecyclerView.VERTICAL,
-                    SourceAdapter(it, VERTICAL)
+                    SourceAdapter(pdfList, VERTICAL)
                 )
             }
         }
 
         /**
          * Observe the data in the view model and set the adapter on the recycler view
-         * Show data in recycler view for pdfs
+         * Show data in recycler view for videos
          */
-        mainViewModel.videoList.observe(this) {
-            it?.let {
+        mainViewModel.getVideoList()
+        lifecycleScope.launch {
+            mainViewModel.videoList.collect { videoList ->
                 // Set the adapter on the recycler view and set the layout manager
                 initRecyclerView(
                     recyclerViewMainVideo,
                     RecyclerView.HORIZONTAL,
-                    SourceAdapter(it, HORIZONTAL)
+                    SourceAdapter(videoList, HORIZONTAL)
                 )
             }
         }
@@ -94,10 +99,10 @@ class MainActivity : AppCompatActivity() {
         /**
          * ProgressBar (video, pdf) is the progress bar to display the loading state.
          */
-        mainViewModel.isLoading.observe(this) {
-            it?.let {
-                binding.progressBarVideo.visibility = if (it) View.VISIBLE else View.GONE
-                binding.progressBarPdf.visibility = if (it) View.VISIBLE else View.GONE
+        lifecycleScope.launch {
+            mainViewModel.isLoading.collect { isLoading ->
+                binding.progressBarVideo.visibility = if (isLoading) View.VISIBLE else View.GONE
+                binding.progressBarPdf.visibility = if (isLoading) View.VISIBLE else View.GONE
             }
         }
 
@@ -140,7 +145,8 @@ class MainActivity : AppCompatActivity() {
         val dialog = BottomSheetDialog(this, R.style.BottomSheetDialogTheme)
         val view = layoutInflater.inflate(R.layout.bottom_sheet_my_source, null)
 
-        val imageButtonMySourceDone = view.findViewById<ImageButton>(R.id.imageButtonMySourceDone)
+        val imageButtonMySourceDone =
+            view.findViewById<ImageButton>(R.id.imageButtonMySourceDone)
 
         recyclerViewMySource = view.findViewById(R.id.recyclerViewMySource)
         recyclerViewMySource.layoutManager = LinearLayoutManager(this)
@@ -169,15 +175,15 @@ class MainActivity : AppCompatActivity() {
             dialog.dismiss()
         }
 
-        dialog.setOnShowListener {
+        dialog.setOnShowListener { it ->
             val bottomSheetDialog = it as BottomSheetDialog
             val parentLayout =
                 bottomSheetDialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
-            parentLayout?.let { it ->
+            parentLayout?.let {
                 val behaviour = BottomSheetBehavior.from(it)
                 setupFullHeight(it)
-                behaviour.state = BottomSheetBehavior.STATE_EXPANDED
-                behaviour.isDraggable = false
+                behaviour.state = BottomSheetBehavior.STATE_COLLAPSED
+                behaviour.isDraggable = true
             }
         }
 

@@ -3,7 +3,6 @@ package com.hyperone.assignment.utils
 import android.app.DownloadManager
 import android.content.Context
 import android.net.Uri
-import zlc.season.rxdownload4.manager.*
 
 /**
  * DownloadUtil class is used to download the file from the url
@@ -32,7 +31,6 @@ class DownloadUtil {
         if (urlString.startsWith("(")) {
             str = urlString.substring(1)
         }
-
 
         if (str.isNotEmpty()) {
             val url = Uri.parse(str)

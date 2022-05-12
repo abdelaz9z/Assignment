@@ -1,12 +1,12 @@
 package com.hyperone.assignment.ui.main
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.hyperone.assignment.const.SourceType.VIDEO
 import com.hyperone.assignment.models.Source
 import com.hyperone.assignment.network.APIClient
 import com.hyperone.assignment.network.APIService
+import kotlinx.coroutines.flow.MutableStateFlow
 
 /**
  * ViewModel for the MainActivity screen.
@@ -25,26 +25,50 @@ import com.hyperone.assignment.network.APIService
  */
 class MainViewModel : ViewModel() {
 
-    private val _isLoading = MutableLiveData<Boolean>()
-    val isLoading = _isLoading
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: MutableStateFlow<Boolean> = _isLoading
+
+    /**
+     * MutableStateFlow for the list of video.
+     * Returns the list of videos.
+     *
+     * @return MutableStateFlow<ArrayList<Source>>
+     */
+    private val _videoList: MutableStateFlow<ArrayList<Source>> =
+        MutableStateFlow(ArrayList())
+
+    /**
+     * Get the list of sources from the API for video
+     */
+    val videoList: MutableStateFlow<ArrayList<Source>> = _videoList
+
+    /**
+     * MutableStateFlow for the list of pdf.
+     * Returns the list of videos.
+     *
+     * @return MutableStateFlow<ArrayList<Source>>
+     */
+    private val _pdfList: MutableStateFlow<ArrayList<Source>> =
+        MutableStateFlow(ArrayList())
+
+    /**
+     * Get the list of sources from the API for pdf
+     */
+    val pdfList: MutableStateFlow<ArrayList<Source>> = _pdfList
 
     var videoSources: ArrayList<Source> = ArrayList()
     var pdfSources: ArrayList<Source> = ArrayList()
 
     /**
-     * LiveData for the list of videos.
-     * Returns the list of videos.
-     *
-     * @return LiveData<ArrayList<Source>>
+     * MutableStateFlow for the list of pdf.
      */
-    private val _pdfList = MutableLiveData<ArrayList<Source>>().apply {
-
-        _isLoading.value = true
+    fun getPdfList() {
+        with(_isLoading) { value = true }
 
         val retro = APIClient().getRetrofitClient().create(APIService::class.java)
         retro.getSources().enqueue(object : retrofit2.Callback<List<Source>> {
             override fun onFailure(call: retrofit2.Call<List<Source>>, throwable: Throwable) {
-                _isLoading.value = false
+                with(_isLoading) { value = false }
                 val message = throwable.message
                 message?.let { Log.e("TAG", it) }
             }
@@ -54,40 +78,33 @@ class MainViewModel : ViewModel() {
                 response: retrofit2.Response<List<Source>>
             ) {
                 if (response.isSuccessful) {
-                    _isLoading.value = false
+                    with(_isLoading) { value = false }
                     val sources: List<Source?>? = response.body()
 
                     for (source in sources!!) {
                         if (source?.type == "PDF") {
                             pdfSources.add(source)
                         }
-                        value = pdfSources
+
+                        with(_pdfList) { value = pdfSources }
                     }
-
-
                 }
             }
         })
     }
 
     /**
-     * Get the list of sources from the API for pdf
+     * MutableStateFlow for the list of video.
      */
-    val pdfList: LiveData<ArrayList<Source>> = _pdfList
+    fun getVideoList() {
 
-    /**
-     * Get the list of sources from the API for videos
-     *
-     * @return LiveData<ArrayList<Source>>
-     */
-    private val _videoList = MutableLiveData<ArrayList<Source>>().apply {
-
-        _isLoading.value = true
+        with(_isLoading) { value = true }
 
         val retro = APIClient().getRetrofitClient().create(APIService::class.java)
         retro.getSources().enqueue(object : retrofit2.Callback<List<Source>> {
             override fun onFailure(call: retrofit2.Call<List<Source>>, throwable: Throwable) {
-                _isLoading.value = false
+                with(_isLoading) { value = false }
+
                 val message = throwable.message
                 message?.let { Log.e("TAG", it) }
             }
@@ -97,22 +114,18 @@ class MainViewModel : ViewModel() {
                 response: retrofit2.Response<List<Source>>
             ) {
                 if (response.isSuccessful) {
-                    _isLoading.value = false
+                    with(_isLoading) { value = false }
                     val sources: List<Source?>? = response.body()
 
                     for (source in sources!!) {
-                        if (source?.type == "VIDEO") {
+                        if (source?.type == VIDEO) {
                             videoSources.add(source)
                         }
-                        value = videoSources
+
+                        with(_videoList) { value = videoSources }
                     }
                 }
             }
         })
     }
-
-    /**
-     * Get the list of sources
-     */
-    val videoList: LiveData<ArrayList<Source>> = _videoList
 }
