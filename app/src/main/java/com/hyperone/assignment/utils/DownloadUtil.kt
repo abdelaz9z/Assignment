@@ -26,19 +26,31 @@ class DownloadUtil {
         description: String,
         context: Context
     ) {
-        // Request to download url file and save it in local storage
-        val request = DownloadManager.Request(Uri.parse(urlString))
-            // Title of file
-            .setTitle(title)
-            .setDescription(description)
-            // Notify when download is complete
-            .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
-            // Allow over method internet connection
-            .setAllowedOverMetered(true)
 
-        // Get download system service
-        val manager = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
-        // Set our request
-        manager.enqueue(request)
+        var str = urlString
+
+        if (urlString.startsWith("(")) {
+            str = urlString.substring(1)
+        }
+
+
+        if (str.isNotEmpty()) {
+            val url = Uri.parse(str)
+
+            // Request to download url file and save it in local storage
+            val request = DownloadManager.Request(url)
+                // Title of file
+                .setTitle(title)
+                .setDescription(description)
+                // Notify when download is complete
+                .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+                // Allow over method internet connection
+                .setAllowedOverMetered(true)
+
+            // Get download system service
+            val manager = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+            // Set our request
+            manager.enqueue(request)
+        }
     }
 }
