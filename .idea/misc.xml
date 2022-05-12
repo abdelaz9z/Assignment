@@ -3,8 +3,20 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/abdel/AndroidStudioProjects/Assignment/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.2985" />
         <entry key="..\:/Users/abdel/AndroidStudioProjects/Assignment/app/src/main/res/drawable/background_title.xml" value="0.2985" />
+        <entry key="..\:/Users/abdel/AndroidStudioProjects/Assignment/app/src/main/res/drawable/dialog_bg.xml" value="0.2985" />
+        <entry key="..\:/Users/abdel/AndroidStudioProjects/Assignment/app/src/main/res/drawable/ic_baseline_arrow_circle_down_24.xml" value="0.2985" />
+        <entry key="..\:/Users/abdel/AndroidStudioProjects/Assignment/app/src/main/res/drawable/ic_baseline_arrow_drop_down_24.xml" value="0.2985" />
+        <entry key="..\:/Users/abdel/AndroidStudioProjects/Assignment/app/src/main/res/drawable/ic_baseline_close_24.xml" value="0.2985" />
+        <entry key="..\:/Users/abdel/AndroidStudioProjects/Assignment/app/src/main/res/drawable/ic_baseline_cloud_download_24.xml" value="0.2985" />
+        <entry key="..\:/Users/abdel/AndroidStudioProjects/Assignment/app/src/main/res/drawable/ic_baseline_folder_24.xml" value="0.2985" />
+        <entry key="..\:/Users/abdel/AndroidStudioProjects/Assignment/app/src/main/res/drawable/ic_baseline_loop_24.xml" value="0.2985" />
+        <entry key="..\:/Users/abdel/AndroidStudioProjects/Assignment/app/src/main/res/drawable/ic_baseline_picture_as_pdf_24.xml" value="0.2985" />
+        <entry key="..\:/Users/abdel/AndroidStudioProjects/Assignment/app/src/main/res/drawable/ic_baseline_video_24.xml" value="0.2985" />
+        <entry key="..\:/Users/abdel/AndroidStudioProjects/Assignment/app/src/main/res/drawable/ic_launcher_background.xml" value="0.2985" />
         <entry key="..\:/Users/abdel/AndroidStudioProjects/Assignment/app/src/main/res/layout/activity_main.xml" value="0.33" />
+        <entry key="..\:/Users/abdel/AndroidStudioProjects/Assignment/app/src/main/res/layout/bottom_sheet_my_source.xml" value="0.33605072463768115" />
         <entry key="..\:/Users/abdel/AndroidStudioProjects/Assignment/app/src/main/res/layout/item_pdf_vertical.xml" value="0.33605072463768115" />
         <entry key="..\:/Users/abdel/AndroidStudioProjects/Assignment/app/src/main/res/layout/item_video_horizontal.xml" value="0.33605072463768115" />
       </map>

@@ -1,14 +1,19 @@
 package com.hyperone.assignment.ui.main
 
-import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
+import android.text.TextUtils
 import android.view.View
+import android.view.WindowManager
+import android.widget.ImageButton
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.hyperone.assignment.R
 import com.hyperone.assignment.adapter.SourceAdapter
 import com.hyperone.assignment.const.Layout.HORIZONTAL
 import com.hyperone.assignment.const.Layout.VERTICAL
@@ -26,6 +31,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var mainViewModel: MainViewModel
 
+    private lateinit var recyclerViewMySource: RecyclerView
+
     /**
      * onCreate method is called when the activity is created.
      *
@@ -38,12 +45,16 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         mainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
+//        mSourceViewModel = ViewModelProvider(this).get(SourceViewModel::class.java)
 
         val recyclerViewMainVideo = binding.recyclerViewMainVideo
         val recyclerViewMainPdf = binding.recyclerViewMainPdf
 
+        /**
+         * Observe the data in the view model and set the adapter on the recycler view
+         * Show data in recycler view for videos
+         */
         mainViewModel.pdfList.observe(this) {
-
             it?.let {
                 // Set the adapter on the recycler view and set the layout manager
                 initRecyclerView(
@@ -54,8 +65,11 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        /**
+         * Observe the data in the view model and set the adapter on the recycler view
+         * Show data in recycler view for pdfs
+         */
         mainViewModel.videoList.observe(this) {
-
             it?.let {
                 // Set the adapter on the recycler view and set the layout manager
                 initRecyclerView(
@@ -75,26 +89,9 @@ class MainActivity : AppCompatActivity() {
                 binding.progressBarPdf.visibility = if (it) View.VISIBLE else View.GONE
             }
         }
-    }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-
-        when (requestCode) {
-            PERMISSION_CODE -> {
-                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // Permission from popup was granted, perform download
-//                    downloadFile(mUrl, mTitle, mDescription)
-                } else {
-                    // Permission from popup was denied, show error message
-                    Toast.makeText(this, "Permission denied!", Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
+        // My source bottom sheet dialog fragment class (for video, pdf)
+        binding.imageButtonMainDownload.setOnClickListener { mySourceBottomSheetDialog() }
     }
 
     /**
@@ -122,23 +119,99 @@ class MainActivity : AppCompatActivity() {
 
         typeAdapter.onItemClick = {
             val id = it.id.toString()
-            Log.d("MainActivity", "id: $id")
-        }
-
-        typeAdapter.onButtonClick = {
-            val id = it.id.toString()
             val type = it.type.toString()
             val url = it.url.toString()
             val name = it.name.toString()
 
-            Log.d("MainActivity", "id: $id")
-            Log.d("MainActivity", "type: $type")
-            Log.d("MainActivity", "url: $url")
-            Log.d("MainActivity", "name: $name")
+            // Insert data (video, pdf) to database
+            insertDataToDatabase(type, url, name)
         }
     }
 
-    companion object {
-        const val PERMISSION_CODE = 1000
+    //==============================================================================================
+    // ● Save response items in local Database Room                                                                                              =
+    //==============================================================================================
+    /**
+     * Insert data (video, pdf) to database (Room) and open the detail activity
+     *
+     * @param type String
+     * @param url String
+     * @param name String
+     */
+    private fun insertDataToDatabase(type: String, url: String, name: String) {
+        if (inputCheck(type, url, name)) {
+            // Create User Object
+
+            // Add Data to Database
+
+
+            Toast.makeText(this, "Successfully added!", Toast.LENGTH_LONG).show()
+        } else {
+            Toast.makeText(this, "Please fill out all fields.", Toast.LENGTH_LONG).show()
+        }
     }
+
+    /**
+     * Check if the input is valid
+     *
+     * @param type String
+     * @param url String
+     * @param name String
+     * @return Boolean
+     */
+    private fun inputCheck(type: String, url: String, name: String): Boolean {
+        return !(TextUtils.isEmpty(type) && TextUtils.isEmpty(url) && TextUtils.isEmpty(name))
+    }
+
+    /**
+     * My source bottom sheet dialog fragment class (for video, pdf)
+     */
+    private fun mySourceBottomSheetDialog() {
+        val dialog = BottomSheetDialog(this, R.style.BottomSheetDialogTheme)
+        val view = layoutInflater.inflate(R.layout.bottom_sheet_my_source, null)
+
+        val imageButtonMySourceDone = view.findViewById<ImageButton>(R.id.imageButtonMySourceDone)
+
+        recyclerViewMySource = view.findViewById(R.id.recyclerViewMySource)
+        recyclerViewMySource.layoutManager = LinearLayoutManager(this)
+        recyclerViewMySource.setHasFixedSize(true)
+
+//        for (source in sources) {
+//            Log.d("MainActivity", "id: ${source.name}")
+//            // Recyclerview
+//            val adapter = ListAdapter(source.type, source.url, source.name)
+//            recyclerViewMySource.adapter = adapter
+//            recyclerViewMySource.layoutManager = LinearLayoutManager(this)
+//        }
+//
+        // Dismiss the dialog when the user makes a selection
+        imageButtonMySourceDone.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.setOnShowListener {
+            val bottomSheetDialog = it as BottomSheetDialog
+            val parentLayout =
+                bottomSheetDialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
+            parentLayout?.let { it ->
+                val behaviour = BottomSheetBehavior.from(it)
+                setupFullHeight(it)
+                behaviour.state = BottomSheetBehavior.STATE_EXPANDED
+                behaviour.isDraggable = false
+            }
+        }
+
+        dialog.setCancelable(false)
+        dialog.setContentView(view)
+        dialog.show()
+    }
+
+    private fun setupFullHeight(bottomSheet: View) {
+        val layoutParams = bottomSheet.layoutParams
+        layoutParams.height = WindowManager.LayoutParams.MATCH_PARENT
+        bottomSheet.layoutParams = layoutParams
+    }
+//==============================================================================================
 }
+
+

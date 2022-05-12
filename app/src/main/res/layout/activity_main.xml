@@ -13,11 +13,12 @@
         android:layout_height="60dp"
         android:layout_marginStart="25dp"
         android:layout_marginTop="16dp"
+        android:contentDescription="@string/hyperone_logo"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/hyperone_logo"
-        android:contentDescription="@string/hyperone_logo" />
+        app:srcCompat="@drawable/hyperone_logo" />
 
+    <!-- Video title -->
     <TextView
         android:id="@+id/textMainVideo"
         android:layout_width="match_parent"
@@ -27,6 +28,7 @@
         android:background="@drawable/background_title"
         android:paddingStart="21dp"
         android:paddingTop="5dp"
+        android:paddingEnd="21dp"
         android:paddingBottom="5dp"
         android:text="@string/main_video"
         android:textAppearance="@style/TextAppearance.AppCompat.Title"
@@ -67,6 +69,7 @@
         android:background="@drawable/background_title"
         android:paddingStart="21dp"
         android:paddingTop="5dp"
+        android:paddingEnd="21dp"
         android:paddingBottom="5dp"
         android:text="@string/main_pdf"
         android:textAppearance="@style/TextAppearance.AppCompat.Title"
@@ -97,4 +100,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textMainPdf" />
+
+    <!--Downloaded source -->
+    <ImageButton
+        android:id="@+id/imageButtonMainDownload"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:backgroundTint="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/imageView"
+        app:srcCompat="@drawable/ic_baseline_cloud_download_24" />
 </androidx.constraintlayout.widget.ConstraintLayout>

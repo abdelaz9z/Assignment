@@ -29,7 +29,10 @@ class MainViewModel : ViewModel() {
     var pdfSources: ArrayList<Source> = ArrayList()
 
     /**
-     * Get the list of sources from the API
+     * LiveData for the list of videos.
+     * Returns the list of videos.
+     *
+     * @return LiveData<ArrayList<Source>>
      */
     private val _pdfList = MutableLiveData<ArrayList<Source>>().apply {
 
@@ -65,12 +68,14 @@ class MainViewModel : ViewModel() {
     }
 
     /**
-     * Get the list of sources
+     * Get the list of sources from the API for pdf
      */
     val pdfList: LiveData<ArrayList<Source>> = _pdfList
 
     /**
-     * Get the list of sources from the API
+     * Get the list of sources from the API for videos
+     *
+     * @return LiveData<ArrayList<Source>>
      */
     private val _videoList = MutableLiveData<ArrayList<Source>>().apply {
 
@@ -98,8 +103,6 @@ class MainViewModel : ViewModel() {
                         }
                         value = videoSources
                     }
-
-
                 }
             }
         })
