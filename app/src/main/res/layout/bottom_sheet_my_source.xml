@@ -28,10 +28,7 @@
         <!-- ImageButton done -->
         <ImageButton
             android:id="@+id/imageButtonMySourceDone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:backgroundTint="@color/white"
+            style="@style/ImageButtonAction"
             android:contentDescription="@string/all_done"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

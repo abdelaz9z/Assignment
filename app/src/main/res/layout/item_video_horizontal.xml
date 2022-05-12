@@ -45,13 +45,8 @@
         <!-- Text name: for example (Video 1, Video 2)-->
         <TextView
             android:id="@+id/textName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/TextViewTitle"
             android:layout_marginTop="16dp"
-            android:maxLines="3"
-            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
-            android:textColor="#37474F"
-            app:fontFamily="sans-serif-medium"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/divider"
@@ -60,16 +55,10 @@
         <!-- Text url: for example (https://storage.googleapis.com/exoplayer-test-media-1/mp4/android-screens-10s.mp4)-->
         <TextView
             android:id="@+id/textUrl"
+            style="@style/TextViewSubTitle"
             android:layout_width="200dp"
-            android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="3dp"
-            android:layout_marginEnd="10dp"
             android:layout_marginBottom="16dp"
-            android:lines="2"
-            android:maxLines="2"
-            android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-            android:textColor="#999999"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/imageButtonDownload"
             app:layout_constraintStart_toStartOf="parent"
@@ -79,10 +68,7 @@
         <!-- Image button download: for example (download, close download)-->
         <ImageButton
             android:id="@+id/imageButtonDownload"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:backgroundTint="@color/white"
+            style="@style/ImageButtonAction"
             android:contentDescription="@string/all_buttonDownload"
             app:layout_constraintBottom_toBottomOf="@+id/textUrl"
             app:layout_constraintEnd_toEndOf="parent"
@@ -92,8 +78,7 @@
         <!-- Progress bar download: show status download-->
         <com.google.android.material.progressindicator.LinearProgressIndicator
             android:id="@+id/progressBarDownload"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            style="@style/LinearProgressIndicator"
             app:indicatorColor="@color/primary_dark"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

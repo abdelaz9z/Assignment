@@ -10,4 +10,5 @@
     <string name="hyperone_logo">HyperOne logo</string>
     <string name="textMySourceTitle">My source</string>
     <string name="all_done">Done</string>
+    <string name="Downloaded">main_downloaded</string>
 </resources>

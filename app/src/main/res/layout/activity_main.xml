@@ -9,6 +9,7 @@
     <!-- Video title -->
     <ImageView
         android:id="@+id/imageView"
+        style="@style/TextAppearance.AppCompat.Title"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_marginStart="25dp"
@@ -104,10 +105,8 @@
     <!--Downloaded source -->
     <ImageButton
         android:id="@+id/imageButtonMainDownload"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:backgroundTint="@color/white"
+        style="@style/ImageButtonAction"
+        android:contentDescription="@string/Downloaded"
         app:layout_constraintBottom_toBottomOf="@+id/imageView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/imageView"
