@@ -132,8 +132,16 @@ class SourceAdapter(
             // Get the current state of the download button
             val id = sourcesData.id!!.toInt()
             val type = sourcesData.type.toString()
-            val url = sourcesData.url.toString().trim()
+            var url = sourcesData.url.toString().trim()
             val name = sourcesData.name.toString()
+
+            // I/Download: Downloading PDF 3 from (https://kotlinlang.org/docs/kotlin-reference.pdf with id 3 and type PDF
+            // I/Download: Downloading PDF 9 from https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf with id 9 and type PDF
+            Log.i("Download", "Downloading $name from $url with id $id and type $type")
+
+            if (url.startsWith("(")) {
+                url = url.substring(1)
+            }
 
             // Download the file
             DownloadUtil().downloadFileFromUrl(url, name, type, holder.itemView.context)
@@ -147,7 +155,7 @@ class SourceAdapter(
                 },
                 onComplete = {
                     //download complete (Open file)
-                    holder.imageButtonDownload.setBackgroundResource(R.drawable.ic_baseline_folder_24)
+                    holder.imageButtonDownload.setImageResource(R.drawable.ic_baseline_folder_24)
                     holder.imageButtonDownload.isEnabled = false
 
                     // Insert the downloaded file into the database room
@@ -161,7 +169,7 @@ class SourceAdapter(
                 },
                 onError = {
                     //download failed (Retry button)
-                    holder.imageButtonDownload.setBackgroundResource(R.drawable.ic_baseline_loop_24)
+                    holder.imageButtonDownload.setImageResource(R.drawable.ic_baseline_loop_24)
                     holder.imageButtonDownload.isEnabled = true
                 }
             )
