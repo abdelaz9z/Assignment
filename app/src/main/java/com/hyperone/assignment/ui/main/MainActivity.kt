@@ -19,11 +19,10 @@ import com.hyperone.assignment.adapter.ListAdapter
 import com.hyperone.assignment.adapter.SourceAdapter
 import com.hyperone.assignment.const.Layout.HORIZONTAL
 import com.hyperone.assignment.const.Layout.VERTICAL
+import com.hyperone.assignment.const.SourceType.PDF
 import com.hyperone.assignment.databinding.ActivityMainBinding
 import com.hyperone.assignment.room.AppDatabase
 import com.hyperone.assignment.room.Source
-import kotlinx.coroutines.flow.collect
-
 /**
  * MainActivity class is the main activity of the application.
  * It contains the recycler view and the adapter to display the sources.
@@ -59,40 +58,34 @@ class MainActivity : AppCompatActivity() {
             .allowMainThreadQueries().build()
 
         mainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
-//        mSourceViewModel = ViewModelProvider(this).get(SourceViewModel::class.java)
 
         val recyclerViewMainVideo = binding.recyclerViewMainVideo
         val recyclerViewMainPdf = binding.recyclerViewMainPdf
 
         /**
          * Observe the data in the view model and set the adapter on the recycler view
-         * Show data in recycler view for pdf
+         * Show data in recycler view for video and pdf
          */
-        mainViewModel.getPdfList()
+        mainViewModel.getSourceList()
         lifecycleScope.launchWhenStarted {
-            mainViewModel.pdfList.collect { pdfList ->
-                // Set the adapter on the recycler view and set the layout manager
-                initRecyclerView(
-                    recyclerViewMainPdf,
-                    RecyclerView.VERTICAL,
-                    SourceAdapter(pdfList, VERTICAL)
-                )
-            }
-        }
-
-        /**
-         * Observe the data in the view model and set the adapter on the recycler view
-         * Show data in recycler view for videos
-         */
-        mainViewModel.getVideoList()
-        lifecycleScope.launchWhenStarted {
-            mainViewModel.videoList.collect { videoList ->
-                // Set the adapter on the recycler view and set the layout manager
-                initRecyclerView(
-                    recyclerViewMainVideo,
-                    RecyclerView.HORIZONTAL,
-                    SourceAdapter(videoList, HORIZONTAL)
-                )
+            mainViewModel.sourceList.collect { sourceList ->
+                sourceList.forEach {
+                    if (it.type == PDF) {
+                        // Set the adapter on the recycler view and set the layout manager
+                        initRecyclerView(
+                            recyclerViewMainPdf,
+                            RecyclerView.VERTICAL,
+                            SourceAdapter(sourceList, VERTICAL)
+                        )
+                    }else{
+                        // Set the adapter on the recycler view and set the layout manager
+                        initRecyclerView(
+                            recyclerViewMainVideo,
+                            RecyclerView.HORIZONTAL,
+                            SourceAdapter(sourceList, HORIZONTAL)
+                        )
+                    }
+                }
             }
         }
 
@@ -205,5 +198,3 @@ class MainActivity : AppCompatActivity() {
     }
 //==============================================================================================
 }
-
-

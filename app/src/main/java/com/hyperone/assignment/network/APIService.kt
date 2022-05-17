@@ -1,7 +1,7 @@
 package com.hyperone.assignment.network
 
 import com.hyperone.assignment.models.Source
-import retrofit2.Call
+import io.reactivex.Observable
 import retrofit2.http.GET
 
 /**
@@ -13,12 +13,13 @@ import retrofit2.http.GET
 interface APIService {
 
     /**
-     * Get all sources  from the API server using retrofit 2
+     * This method is used to get the list of sources.
+     * - The response is an observable of [Source]
      *
-     * @return Call<List<Source>>
+     * @return Observable<List<Source>>
      */
     @GET(VALUE_SOURCES)
-    fun getSources(): Call<List<Source>>
+    fun getSources(): Observable<List<Source>>
 
     companion object {
         private const val VALUE_SOURCES = "/HyperoneWebservice/getListOfFilesResponse.json"
